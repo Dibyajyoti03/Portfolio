@@ -59,6 +59,20 @@ a {
   color: inherit;
 }
 
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--teal));
+  box-shadow: 0 0 22px color-mix(in srgb, var(--accent) 45%, transparent);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  pointer-events: none;
+}
+
 .site-loader {
   position: fixed;
   inset: 0;
@@ -225,7 +239,8 @@ a {
 
 .col-lg-5,
 .col-lg-6,
-.col-lg-7 {
+.col-lg-7,
+.col-lg-9 {
   width: 100%;
 }
 
@@ -259,6 +274,13 @@ a {
   display: inline-flex;
 }
 
+.nav-utility {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 12px;
+}
+
 @media (min-width: 992px) {
   .navbar-collapse {
     display: flex;
@@ -281,6 +303,10 @@ a {
 
   .col-lg-7 {
     width: 58.3333%;
+  }
+
+  .col-lg-9 {
+    width: 75%;
   }
 }
 
@@ -328,16 +354,36 @@ a {
 }
 
 .site-nav .navbar-nav .nav-link {
+  position: relative;
   color: rgba(255, 255, 255, 0.92);
   font-weight: 900;
   font-size: 0.92rem;
   text-shadow: none;
 }
 
+.site-nav .navbar-nav .nav-link::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0.15rem;
+  left: 0;
+  height: 2px;
+  border-radius: 999px;
+  background: #ffb38d;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 180ms ease;
+}
+
 .site-nav .navbar-nav .nav-link:hover,
 .site-nav .navbar-nav .nav-link.active {
   color: #ffb38d;
   text-shadow: none;
+}
+
+.site-nav .navbar-nav .nav-link:hover::after,
+.site-nav .navbar-nav .nav-link.active::after {
+  transform: scaleX(1);
 }
 
 .nav-cta,
@@ -426,6 +472,26 @@ a {
   box-shadow: 0 14px 32px rgba(16, 24, 32, 0.12);
 }
 
+.btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 0 32%, rgba(255, 255, 255, 0.34) 48%, transparent 64% 100%);
+  transform: translateX(-130%);
+  transition: transform 520ms ease;
+  pointer-events: none;
+}
+
+.btn:hover::after,
+.btn:focus-visible::after {
+  transform: translateX(130%);
+}
+
 .hero-section {
   position: relative;
   min-height: 100svh;
@@ -466,12 +532,15 @@ a {
   position: absolute;
   right: clamp(18px, 6vw, 96px);
   top: 19%;
+  z-index: 1;
   display: grid;
   gap: 16px;
   color: rgba(255, 255, 255, 0.55);
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: clamp(0.78rem, 1.3vw, 1rem);
   transform: rotate(-3deg);
+  pointer-events: none;
+  will-change: transform;
 }
 
 .hero-code span {
@@ -521,9 +590,15 @@ a {
   background: rgba(255, 253, 250, 0.78);
   box-shadow: var(--shadow);
   backdrop-filter: blur(18px);
+  transition:
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    background 220ms ease,
+    transform 220ms ease;
 }
 
 .hero-card {
+  position: relative;
   min-height: 100%;
   padding: clamp(2rem, 5vw, 4.2rem);
   color: #fff;
@@ -532,6 +607,18 @@ a {
     rgba(16, 24, 32, 0.36);
   border-color: rgba(255, 255, 255, 0.16);
   overflow: hidden;
+  will-change: transform;
+}
+
+.hero-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, 0.16), transparent 28%),
+    linear-gradient(270deg, rgba(94, 234, 212, 0.18), transparent 32%);
+  opacity: 0.62;
+  pointer-events: none;
 }
 
 .hero-stack {
@@ -703,6 +790,12 @@ h3 {
   padding: clamp(1.35rem, 3vw, 2.25rem);
 }
 
+.story-card {
+  position: relative;
+  overflow: hidden;
+  will-change: transform;
+}
+
 .story-card p {
   color: var(--muted);
   line-height: 1.8;
@@ -715,10 +808,13 @@ h3 {
 }
 
 .metric-card {
+  position: relative;
+  overflow: hidden;
   min-height: 150px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--surface);
+  will-change: transform;
 }
 
 .metric-card span,
@@ -735,6 +831,11 @@ h3 {
   margin-top: 12px;
   font-size: 1.25rem;
   line-height: 1.2;
+}
+
+.metric-card .role-list {
+  font-size: 1.05rem;
+  line-height: 1.45;
 }
 
 .lead-muted {
@@ -759,11 +860,53 @@ h3 {
 }
 
 .skill-panel {
+  position: relative;
+  overflow: hidden;
   min-height: 248px;
   padding: 28px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: linear-gradient(180deg, #fff, #fbf7f0);
+  will-change: transform;
+}
+
+.story-card::after,
+.skill-panel::after,
+.project-card::after,
+.metric-card::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--teal));
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 260ms ease;
+}
+
+.story-card:hover::after,
+.story-card:focus-within::after,
+.skill-panel:hover::after,
+.skill-panel:focus-within::after,
+.project-card:hover::after,
+.project-card:focus-within::after,
+.metric-card:hover::after,
+.metric-card:focus-within::after {
+  transform: scaleX(1);
+}
+
+.story-card:hover,
+.story-card:focus-within {
+  transform: translateY(-8px) scale(1.01) !important;
+}
+
+.story-card:hover,
+.skill-panel:hover,
+.project-card:hover,
+.metric-card:hover,
+.contact-card:hover {
+  border-color: color-mix(in srgb, var(--accent) 42%, var(--line));
+  box-shadow: 0 30px 86px rgba(16, 24, 32, 0.18);
 }
 
 .skill-panel i {
@@ -795,6 +938,16 @@ h3 {
   background: var(--chip-bg);
   font-size: 0.84rem;
   font-weight: 750;
+  transition: transform 180ms ease, background 180ms ease, color 180ms ease;
+}
+
+.skill-panel:hover .chip-wrap span,
+.project-card:hover .chip-wrap span {
+  background: color-mix(in srgb, var(--accent) 18%, var(--chip-bg));
+}
+
+.chip-wrap span:hover {
+  transform: translateY(-2px);
 }
 
 .project-list {
@@ -808,11 +961,14 @@ h3 {
 }
 
 .project-card {
+  position: relative;
+  overflow: hidden;
   display: grid;
   grid-template-columns: 74px minmax(220px, 0.9fr) minmax(0, 1.15fr) auto;
   gap: clamp(18px, 3vw, 34px);
   align-items: start;
   padding: clamp(1.4rem, 3vw, 2.35rem);
+  will-change: transform;
 }
 
 .project-number {
@@ -916,6 +1072,7 @@ h3 {
   color: #fff;
   background: rgba(16, 24, 32, 0.36);
   border-color: rgba(255, 255, 255, 0.16);
+  will-change: transform;
 }
 
 .site-footer {
@@ -985,7 +1142,17 @@ h3 {
     background: linear-gradient(180deg, rgba(5, 8, 13, 0.92), rgba(5, 8, 13, 0.82));
   }
 
+  .site-nav .container {
+    flex-wrap: wrap;
+  }
+
+  .nav-utility {
+    margin-left: auto;
+  }
+
   .navbar-collapse.show {
+    order: 4;
+    width: 100%;
     margin-top: 14px;
     padding: 16px;
     border: 1px solid rgba(255, 255, 255, 0.16);
@@ -1032,6 +1199,10 @@ h3 {
   .hero-section {
     min-height: auto;
     padding-top: 96px;
+  }
+
+  .hero-code {
+    display: none;
   }
 
   .hero-card h1 {

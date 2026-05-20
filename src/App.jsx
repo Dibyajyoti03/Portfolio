@@ -1,6 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "./styles.css";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const profile = {
   name: "Dibyajyoti Mohanty",
@@ -38,7 +42,7 @@ const skillGroups = [
   {
     title: "Backend",
     icon: "bi-hdd-network",
-    items: ["Java", "Spring Framework", "Spring Boot", "Microservices", "OOP", "Collections", "Exception Handling", "JDBC"],
+    items: ["Java", "Spring Framework", "Spring Boot", "Microservices"],
   },
   {
     title: "Frontend",
@@ -82,10 +86,10 @@ const projects = [
     name: "Simple Banking Application",
     type: "Core Java console app",
     url: "https://github.com/Dibyajyoti03/banking-app",
-    stack: ["Core Java", "OOP", "Collections Framework", "File I/O"],
+    stack: ["Core Java", "File I/O"],
     details: [
       "Designed and implemented a console-based banking app covering account creation, deposit, withdrawal, and balance enquiry.",
-      "Applied encapsulation, inheritance, polymorphism, and Java Collections for account management.",
+      "Applied Java fundamentals and modular code structure for account management.",
     ],
   },
   {
@@ -122,9 +126,9 @@ const projects = [
 
 const timeline = [
   {
-    date: "Jan 2025 - Present",
+    date: "Jan 2026 - Feb 2026",
     title: "Core Java Internship - Skillifyz Technologies",
-    detail: "Weekly Java tasks across OOP, Collections, Exception Handling, File I/O, and menu-driven applications.",
+    detail: "Weekly Java tasks across Core Java, File I/O, and menu-driven applications.",
   },
   {
     date: "2024",
@@ -155,7 +159,7 @@ function Loader({ isLoading }) {
         <div className="loader-orbit">
           <span>Java</span>
           <span>React</span>
-        <span>AWS</span>
+          <span>AWS</span>
           <strong>DM</strong>
         </div>
         <p>Preparing portfolio</p>
@@ -163,6 +167,31 @@ function Loader({ isLoading }) {
           <span></span>
         </div>
       </div>
+    </div>
+  );
+}
+
+function ThemeSwitch({ theme, onThemeChange }) {
+  return (
+    <div className="theme-switch" role="group" aria-label="Theme selection">
+      <button
+        className={theme === "light" ? "active" : ""}
+        type="button"
+        onClick={() => onThemeChange("light")}
+        aria-pressed={theme === "light"}
+      >
+        <i className="bi bi-sun-fill"></i>
+        <span>Light</span>
+      </button>
+      <button
+        className={theme === "dark" ? "active" : ""}
+        type="button"
+        onClick={() => onThemeChange("dark")}
+        aria-pressed={theme === "dark"}
+      >
+        <i className="bi bi-moon-stars-fill"></i>
+        <span>Dark</span>
+      </button>
     </div>
   );
 }
@@ -200,16 +229,6 @@ function Header({ theme, onThemeChange }) {
         <a className="navbar-brand brand-mark" href="#home" aria-label="Dibyajyoti Mohanty home">
           DM
         </a>
-        <button
-          className="navbar-toggler"
-          type="button"
-          aria-controls="portfolioNavbar"
-          aria-expanded={isMenuOpen}
-          aria-label="Toggle navigation"
-          onClick={() => setIsMenuOpen((open) => !open)}
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
         <div className={`collapse navbar-collapse ${isMenuOpen ? "show" : ""}`} id="portfolioNavbar">
           <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
             {navItems.map((item) => (
@@ -225,31 +244,24 @@ function Header({ theme, onThemeChange }) {
             ))}
           </ul>
           <div className="nav-actions">
-            <div className="theme-switch" role="group" aria-label="Theme selection">
-              <button
-                className={theme === "light" ? "active" : ""}
-                type="button"
-                onClick={() => onThemeChange("light")}
-                aria-pressed={theme === "light"}
-              >
-                <i className="bi bi-sun-fill"></i>
-                <span>Light</span>
-              </button>
-              <button
-                className={theme === "dark" ? "active" : ""}
-                type="button"
-                onClick={() => onThemeChange("dark")}
-                aria-pressed={theme === "dark"}
-              >
-                <i className="bi bi-moon-stars-fill"></i>
-                <span>Dark</span>
-              </button>
-            </div>
             <a className="btn btn-sm nav-cta" href={profile.resume} download onClick={() => setIsMenuOpen(false)}>
               <i className="bi bi-download"></i>
               Resume
             </a>
           </div>
+        </div>
+        <div className="nav-utility">
+          <ThemeSwitch theme={theme} onThemeChange={onThemeChange} />
+          <button
+            className="navbar-toggler"
+            type="button"
+            aria-controls="portfolioNavbar"
+            aria-expanded={isMenuOpen}
+            aria-label="Toggle navigation"
+            onClick={() => setIsMenuOpen((open) => !open)}
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
         </div>
       </div>
     </nav>
@@ -263,11 +275,17 @@ function Hero() {
     <header className="hero-section" id="home">
       <div className="motion-sweep" aria-hidden="true"></div>
       <div className="hero-backdrop" aria-hidden="true"></div>
+      <div className="hero-code" aria-hidden="true">
+        <span>JavaService.build()</span>
+        <span>SpringBoot.run()</span>
+        <span>React.render()</span>
+        <span>AWS.deploy()</span>
+      </div>
       <div className="container">
         <div className="row g-4 align-items-stretch hero-row">
           <div className="col-lg-9">
             <div className="hero-card card-surface section-reveal">
-              <p className="eyebrow">Portfolio / Java Full Stack / Spring Boot</p>
+              <p className="eyebrow">Java Fullstack Developer</p>
               <h1>
                 {nameWords.map((word) => (
                   <span className="hero-name-word" key={word}>
@@ -316,8 +334,8 @@ function Profile() {
               <h3>Java full stack candidate with proof across backend, frontend, cloud, and AI-assisted delivery.</h3>
               <p>
                 I bring a recruiter-friendly mix of Core Java, Spring Boot, ReactJS, Oracle SQL, AWS fundamentals, and
-                DevSecOps tooling. My Skillifyz internship has strengthened my OOP, Collections, Exception Handling,
-                File I/O, and menu-driven Java application practice.
+                DevSecOps tooling. My Skillifyz internship has strengthened my Core Java, File I/O, and menu-driven
+                Java application practice.
               </p>
               <p>
                 My portfolio shows practical work across e-commerce flows, banking logic, face-recognition attendance,
@@ -342,7 +360,15 @@ function Profile() {
               </article>
               <article className="metric-card section-reveal">
                 <span>Open for</span>
-                <strong>Roles that fit my portfolio</strong>
+                <strong className="role-list">
+                  Software Development
+                  <br />
+                  Frontend Developer
+                  <br />
+                  Java Developer
+                  <br />
+                  ReactJS Developer
+                </strong>
               </article>
             </div>
           </div>
@@ -420,7 +446,6 @@ function Training() {
       <div className="container">
         <div className="section-head section-reveal">
           <p className="eyebrow">Internships & Education</p>
-          <h2>Core Java internship, web development training, and computer science education from the final resume.</h2>
         </div>
         <div className="timeline-card card-surface section-reveal">
           <div className="timeline-list">
@@ -509,11 +534,14 @@ function App() {
       return;
     }
 
+    ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+
     document.querySelectorAll(".hero-section .section-reveal").forEach((element) => {
       element.classList.add("in-view");
     });
 
     gsap.set(".motion-sweep", { xPercent: -110, opacity: 1 });
+    gsap.set(".scroll-progress", { scaleX: 0, transformOrigin: "0% 50%" });
     gsap.set(".site-nav", { y: -42, opacity: 0 });
     gsap.set(".hero-card .eyebrow", { y: 28, opacity: 0 });
     gsap.set(".hero-name-word", {
@@ -525,6 +553,7 @@ function App() {
     gsap.set(".hero-role, .hero-copy", { y: 42, opacity: 0, filter: "blur(10px)" });
     gsap.set(".hero-actions .btn", { y: 30, opacity: 0, scale: 0.94 });
     gsap.set(".proof-strip div", { y: 36, opacity: 0, scale: 0.94 });
+    gsap.set(".hero-code span", { x: 42, opacity: 0, rotate: -2 });
 
     const intro = gsap.timeline({ defaults: { ease: "power4.out" } });
     intro
@@ -546,6 +575,11 @@ function App() {
         ".hero-actions .btn",
         { y: 0, opacity: 1, scale: 1, duration: 0.62, stagger: 0.11 },
         "-=0.48"
+      )
+      .to(
+        ".hero-code span",
+        { x: 0, opacity: 1, rotate: 0, duration: 0.7, stagger: 0.08 },
+        "-=0.56"
       )
       .to(
         ".proof-strip div",
@@ -572,6 +606,58 @@ function App() {
       delay: 1.6,
     });
 
+    const progressTween = gsap.to(".scroll-progress", {
+      scaleX: 1,
+      ease: "none",
+      scrollTrigger: {
+        trigger: document.documentElement,
+        start: "top top",
+        end: "bottom bottom",
+        scrub: 0.2,
+      },
+    });
+
+    const heroDepthTween = gsap.to(".hero-card", {
+      yPercent: 8,
+      ease: "none",
+      scrollTrigger: {
+        trigger: ".hero-section",
+        start: "top top",
+        end: "bottom top",
+        scrub: true,
+      },
+    });
+
+    const codeDepthTween = gsap.to(".hero-code", {
+      yPercent: -16,
+      rotate: 1.5,
+      ease: "none",
+      scrollTrigger: {
+        trigger: ".hero-section",
+        start: "top top",
+        end: "bottom top",
+        scrub: true,
+      },
+    });
+
+    const hoverTargets = document.querySelectorAll(
+      ".story-card, .skill-panel, .project-card, .metric-card, .contact-card"
+    );
+    const hoverCleanups = Array.from(hoverTargets).map((element) => {
+      const lift = () => gsap.to(element, { y: -8, scale: 1.01, duration: 0.28, ease: "power2.out" });
+      const settle = () => gsap.to(element, { y: 0, scale: 1, duration: 0.34, ease: "power2.out" });
+      element.addEventListener("mouseenter", lift);
+      element.addEventListener("mouseleave", settle);
+      element.addEventListener("focusin", lift);
+      element.addEventListener("focusout", settle);
+      return () => {
+        element.removeEventListener("mouseenter", lift);
+        element.removeEventListener("mouseleave", settle);
+        element.removeEventListener("focusin", lift);
+        element.removeEventListener("focusout", settle);
+      };
+    });
+
     if (!("IntersectionObserver" in window)) {
       revealElements.forEach((element) => element.classList.add("in-view"));
       return;
@@ -588,16 +674,16 @@ function App() {
           element.classList.add("in-view");
           gsap.fromTo(
             element,
-            { y: 34, opacity: 0, scale: 0.98 },
-            { y: 0, opacity: 1, scale: 1, duration: 0.75, ease: "power3.out" }
+            { y: 46, opacity: 0, scale: 0.97, filter: "blur(8px)" },
+            { y: 0, opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.82, ease: "power3.out" }
           );
 
-          const children = element.querySelectorAll(".chip-wrap span, li");
+          const children = element.querySelectorAll(".chip-wrap span, li, .timeline-item");
           if (children.length) {
             gsap.fromTo(
               children,
-              { y: 10, opacity: 0 },
-              { y: 0, opacity: 1, duration: 0.45, stagger: 0.035, delay: 0.08, ease: "power2.out" }
+              { y: 12, opacity: 0, scale: 0.98 },
+              { y: 0, opacity: 1, scale: 1, duration: 0.48, stagger: 0.04, delay: 0.08, ease: "power2.out" }
             );
           }
 
@@ -618,12 +704,18 @@ function App() {
       intro.kill();
       backdropTween.kill();
       proofTween.kill();
+      progressTween.kill();
+      heroDepthTween.kill();
+      codeDepthTween.kill();
+      hoverCleanups.forEach((cleanup) => cleanup());
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
 
   return (
     <>
       <Loader isLoading={isLoading} />
+      <div className="scroll-progress" aria-hidden="true"></div>
       <Header theme={theme} onThemeChange={setTheme} />
       <main>
         <Hero />
@@ -639,6 +731,7 @@ function App() {
           <span>Java Full Stack Developer | Spring Boot | ReactJS | AWS</span>
         </div>
       </footer>
+      <Analytics />
     </>
   );
 }
