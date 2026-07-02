@@ -3,6 +3,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "./styles.css";
+import ProjectSandboxModal from "./ProjectSandbox.jsx";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -924,7 +925,7 @@ function Skills() {
   );
 }
 
-function Projects() {
+function Projects({ onOpenSandbox }) {
   return (
     <section className="section-padding project-section" id="projects">
       <div className="container">
@@ -954,10 +955,16 @@ function Projects() {
                     <li key={detail}>{detail}</li>
                   ))}
                 </ul>
-                <a className="project-link" href={project.url} target="_blank" rel="noreferrer">
-                  <i className="bi bi-github"></i>
-                  View GitHub
-                </a>
+                <div className="project-card-footer">
+                  <a className="project-link" href={project.url} target="_blank" rel="noreferrer">
+                    <i className="bi bi-github"></i>
+                    View GitHub
+                  </a>
+                  <button className="project-link sandbox-trigger-btn" onClick={() => onOpenSandbox(project)}>
+                    <i className="bi bi-play-fill"></i>
+                    Run Sandbox
+                  </button>
+                </div>
               </TiltCard>
             );
           })}
@@ -1034,6 +1041,7 @@ function Contact() {
 function App() {
   const year = useMemo(() => new Date().getFullYear(), []);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeSandbox, setActiveSandbox] = useState(null);
   const [theme, setTheme] = useState(() => {
     try {
       const storedTheme = window.localStorage.getItem("portfolio-theme");
@@ -1273,7 +1281,7 @@ function App() {
         <Hero />
         <Profile />
         <Skills />
-        <Projects />
+        <Projects onOpenSandbox={setActiveSandbox} />
         <Training />
         <Contact />
       </main>
@@ -1285,6 +1293,7 @@ function App() {
           </span>
         </div>
       </footer>
+      <ProjectSandboxModal activeSandbox={activeSandbox} onClose={() => setActiveSandbox(null)} />
       <Analytics />
     </>
   );
